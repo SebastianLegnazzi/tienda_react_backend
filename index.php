@@ -2,6 +2,16 @@
 
 require 'flight/Flight.php';
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+$method = $_SERVER['REQUEST_METHOD'];
+if($method == "OPTIONS") {
+    die();
+}
+
+
 // Mensaje cuando no se ingresa ningun clase
 Flight::route('/', function () {
     echo 'Debes seleccionar una clase para empezar a trabjar!';
