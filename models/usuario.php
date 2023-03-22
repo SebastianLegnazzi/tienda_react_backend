@@ -13,14 +13,13 @@ Flight::route('GET /usuarios', function(){
 });
 
 //Lista un usuario
-Flight::route('GET /usuarios/@id', function($id){
-    $query = Flight::db()->prepare("SELECT * FROM `usuario` WHERE idUsuario = ?");
-    $query->bindParam(1,$id);
+Flight::route('GET /usuarios/@nombre', function($nombre){
+    $query = Flight::db()->prepare("SELECT * FROM `usuario` WHERE usNombre = ?");
+    $query->bindParam(1,$nombre);
     $query->execute();
     $datos = $query->fetchAll();
     Flight::json($datos);
 });
-
 
 //Carga usuarios a la base de datos
 Flight::route('POST /usuarios', function(){
