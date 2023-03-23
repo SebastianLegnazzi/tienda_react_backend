@@ -41,10 +41,9 @@ Flight::route('POST /producto', function(){
 });
 
 //Borrar un producto
-Flight::route('DELETE /producto', function(){
-    $idProducto = (Flight::request()->data['idProducto']);
+Flight::route('DELETE /producto/@id', function($id){
     $query = Flight::db()->prepare("DELETE FROM producto WHERE idProducto=?");
-    $query->bindParam(1,$idProducto);
+    $query->bindParam(1,$id);
     $query->execute();
     Flight::json(["resp" => 1]);
 });

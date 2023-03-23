@@ -12,9 +12,18 @@ Flight::route('GET /compra', function(){
     Flight::json($datos); // armamos y devolvemos el JSON al cliente
 });
 
-//Lista una compra
+//Lista una compra por su id
 Flight::route('GET /compra/@id', function($id){
     $query = Flight::db()->prepare("SELECT * FROM `compra` WHERE idCompra = ?");
+    $query->bindParam(1,$id);
+    $query->execute();
+    $datos = $query->fetchAll();
+    Flight::json($datos);
+});
+
+//Lista una compra por su usuario
+Flight::route('GET /compra/usuario/@id', function($id){
+    $query = Flight::db()->prepare("SELECT * FROM `compra` WHERE idUsuario = ?");
     $query->bindParam(1,$id);
     $query->execute();
     $datos = $query->fetchAll();
@@ -24,23 +33,22 @@ Flight::route('GET /compra/@id', function($id){
 
 //Carga una compra a la base de datos
 Flight::route('POST /compra', function(){
-    $fecha = (Flight::request()->data['coFecha']);
     $idUsuario = (Flight::request()->data['idUsuario']);
-    //Asignamos el parametro en el cual pusimos "?" (mientras mas hayan se ponen en orden de derecha a izquierda incrementando el numero)
-    //                                                                                  1  2  3
-    $query = Flight::db()->prepare("INSERT INTO compra (coFecha,idUsuario) VALUES(?, ?)");
-    $query->bindParam(1,$fecha); 
-    $query->bindParam(2,$idUsuario);
+    $query = Flight::db()->prepare("INSERT INTO compra (idUsuario) VALUES(?)");
+    $query->bindParam(1,$idUsuario);
     $query->execute();
-    
-    Flight::json(["resp" => 1]);
+    $query = Flight::db()->prepare("SELECT * FROM `compra` WHERE idUsuario = ? ORDER BY idUsuario DESC");
+    $query->bindParam(1,$idUsuario);
+    $query->execute();
+    $datos = $query->fetchAll();
+    $idUltimaCompra = end($datos)["idCompra"];
+    Flight::json(["resp" => $idUltimaCompra]);
 });
 
 //Borrar una compra
-Flight::route('DELETE /compra', function(){
-    $idCompra = (Flight::request()->data['idCompra']);
+Flight::route('DELETE /compra/@id', function($id){
     $query = Flight::db()->prepare("DELETE FROM compra WHERE idCompra=?");
-    $query->bindParam(1,$idCompra);
+    $query->bindParam(1,$id);
     $query->execute();
     Flight::json(["resp" => 1]);
 });

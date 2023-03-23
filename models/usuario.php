@@ -12,7 +12,7 @@ Flight::route('GET /usuarios', function(){
     Flight::json($datos); // armamos y devolvemos el JSON al cliente
 });
 
-//Lista un usuario
+//Lista un usuario por su nombre
 Flight::route('GET /usuarios/@nombre', function($nombre){
     $query = Flight::db()->prepare("SELECT * FROM `usuario` WHERE usNombre = ?");
     $query->bindParam(1,$nombre);
@@ -21,11 +21,20 @@ Flight::route('GET /usuarios/@nombre', function($nombre){
     Flight::json($datos);
 });
 
+//Lista un usuario por su email
+Flight::route('GET /usuarios/email/@email', function($email){
+    $query = Flight::db()->prepare("SELECT * FROM `usuario` WHERE usMail = ?");
+    $query->bindParam(1,$email);
+    $query->execute();
+    $datos = $query->fetchAll();
+    Flight::json($datos);
+});
+
 //Carga usuarios a la base de datos
 Flight::route('POST /usuarios', function(){
-    $nombre = (Flight::request()->data['nombre']);
-    $pass = (Flight::request()->data['pass']);
-    $mail = (Flight::request()->data['mail']);
+    $nombre = (Flight::request()->data['usNombre']);
+    $pass = (Flight::request()->data['usPass']);
+    $mail = (Flight::request()->data['usMail']);
     //Asignamos el parametro en el cual pusimos "?" (mientras mas hayan se ponen en orden de derecha a izquierda incrementando el numero)
     //                                                                                  1  2  3
     $query = Flight::db()->prepare("INSERT INTO usuario (usNombre,usPass,usMail) VALUES(?, ?, ?)");
@@ -38,10 +47,9 @@ Flight::route('POST /usuarios', function(){
 });
 
 //Borrar un usuario
-Flight::route('DELETE /usuarios', function(){
-    $idUsuario = (Flight::request()->data['idUsuario']);
+Flight::route('DELETE /usuarios/@id', function($id){
     $query = Flight::db()->prepare("DELETE FROM usuario WHERE idUsuario=?");
-    $query->bindParam(1,$idUsuario);
+    $query->bindParam(1,$id);
     $query->execute();
     Flight::json(["resp" => 1]);
 });

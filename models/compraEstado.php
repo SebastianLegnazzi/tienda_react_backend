@@ -21,6 +21,15 @@ Flight::route('GET /compraestado/@id', function($id){
     Flight::json($datos);
 });
 
+//Lista una compra
+Flight::route('GET /compraestado/compra/@id', function($id){
+    $query = Flight::db()->prepare("SELECT * FROM `compraestado` WHERE idCompra = ?");
+    $query->bindParam(1,$id);
+    $query->execute();
+    $datos = $query->fetchAll();
+    Flight::json($datos);
+});
+
 
 //Carga una compraestado a la base de datos
 Flight::route('POST /compraestado', function(){
@@ -37,10 +46,9 @@ Flight::route('POST /compraestado', function(){
 });
 
 //Borrar una compraestado
-Flight::route('DELETE /compraestado', function(){
-    $idCompraestado = (Flight::request()->data['idCompraestado']);
+Flight::route('DELETE /compraestado/@id', function($id){
     $query = Flight::db()->prepare("DELETE FROM compraestado WHERE idCompraestado=?");
-    $query->bindParam(1,$idCompraestado);
+    $query->bindParam(1,$id);
     $query->execute();
     Flight::json(["resp" => 1]);
 });

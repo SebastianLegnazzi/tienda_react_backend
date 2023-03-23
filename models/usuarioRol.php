@@ -35,9 +35,7 @@ Flight::route('POST /usuariorol', function(){
 });
 
 //Borrar un usuariorol
-Flight::route('DELETE /usuariorol', function(){
-    $idUsuario = (Flight::request()->data['idUsuario']);
-    $idRol = (Flight::request()->data['idRol']);
+Flight::route('DELETE /usuariorol/@idUsuario/@idRol', function($idUsuario, $idRol){
     $query = Flight::db()->prepare("DELETE FROM usuariorol WHERE idUsuario = ? AND idRol = ?");
     $query->bindParam(1,$idUsuario);
     $query->bindParam(2,$idRol);
