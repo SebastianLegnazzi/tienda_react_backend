@@ -55,17 +55,17 @@ Flight::route('DELETE /compraestado/@id', function($id){
 
 //Actualizar una compraestado
 Flight::route('PUT /compraestado', function(){
-    $idCompraestado = (Flight::request()->data['idCompraestado']);
+    $idCompraEstado = (Flight::request()->data['idCompraEstado']);
     $idCompra = (Flight::request()->data['idCompra']);
     $idCompraEstadoTipo = (Flight::request()->data['idCompraEstadoTipo']);
-    $coFechaIni = (Flight::request()->data['coFechaIni']);
-    $coFechaFin = (Flight::request()->data['coFechaFin']);
-    $query = Flight::db()->prepare("UPDATE compraestado SET idCompra=? , idCompraEstadoTipo=?, coFechaIni=?, coFechaFin=?  WHERE idCompraestado=?");
+    $ceFechaIni = (Flight::request()->data['ceFechaIni']);
+    $ceFechaFin = (Flight::request()->data['ceFechaFin']);
+    $query = Flight::db()->prepare("UPDATE compraestado SET idCompra=? , idCompraEstadoTipo=?, ceFechaIni=?, ceFechaFin=?  WHERE idCompraEstado=?");
     $query->bindParam(1,$idCompra); 
     $query->bindParam(2,$idCompraEstadoTipo);
-    $query->bindParam(3,$coFechaIni);
-    $query->bindParam(4,$coFechaFin);
-    $query->bindParam(5,$idCompraestado);
+    $query->bindParam(3,$ceFechaIni);
+    $query->bindParam(4,$ceFechaFin);
+    $query->bindParam(5,$idCompraEstado);
     $query->execute();
     Flight::json(["resp" => 1]);
 });
